@@ -1,0 +1,1270 @@
+controller.jave
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/students")
+public class Controller {
+
+    @Autowired
+    private Repository repo;
+
+    // CREATE
+    @PostMapping
+    public Student createStudent(@RequestBody Student student) {
+        return repo.save(student);
+    }
+
+    // READ ALL
+    @GetMapping
+    public List<Student> getAllStudents() {
+        return repo.findAll();
+    }
+
+    // READ ONE
+    @GetMapping("/{id}")
+    public Student getStudent(@PathVariable Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
+        student.setId(id);
+        return repo.save(student);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public String deleteStudent(@PathVariable Long id) {
+        repo.deleteById(id);
+        return "Deleted Successfully";
+    }
+}
+demoapp.java
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApp {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApp.class, args);
+    }
+}
+kuduapp.java
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class KurudhuApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(KurudhuApplication.class, args);
+	}
+
+}
+
+repository.java
+package com.example.demo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.demo.Student;
+
+public interface Repository extends JpaRepository<Student, Long> {
+}
+student.java
+package com.example.demo;
+
+import jakarta.persistence.*;
+
+@Entity
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String email;
+	public void setId(Long id2) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", name=" + name + ", email=" + email + "]";
+	}
+	public Student() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Student(Long id, String name, String email) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public Long getId() {
+		return id;
+	}
+
+    // Getters and Setters
+}
+applications properties
+spring.application.name=kurudhu
+spring.datasource.url=jdbc:mysql://localhost:3306/testdb
+spring.datasource.username=root
+spring.datasource.password=acetcse
+server.port=4000
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+pom.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>kurudhu</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>kurudhu</name>
+	<description>Demo project for Spring Boot</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <scope>runtime</scope>
+</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+1b)
+server.js
+const express = require("express");
+const mongoose = require("mongoose");
+
+const app = express();
+app.use(express.json());
+
+// Connect MongoDB
+mongoose.connect("mongodb://127.0.0.1:27017/testdb")
+.then(() => console.log("MongoDB Connected"))
+.catch(err => console.log(err));
+const Student = require("./Student");
+
+// CREATE
+app.post("/students", async (req, res) => {
+  const student = new Student(req.body);
+  const data = await student.save();
+  res.send(data);
+});
+
+// READ
+app.get("/students", async (req, res) => {
+  const data = await Student.find();
+  res.send(data);
+});
+
+// UPDATE
+app.put("/students/:id", async (req, res) => {
+  const data = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.send(data);
+});
+
+// DELETE
+app.delete("/students/:id", async (req, res) => {
+  await Student.findByIdAndDelete(req.params.id);
+  res.send("Deleted Successfully");
+});
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+student.js
+const mongoose = require("mongoose");
+
+const studentSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true }
+});
+
+module.exports = mongoose.model("Student", studentSchema);
+package.json
+
+2)
+🧩 PART 1: CREATE NODE PROJECT
+🔹 STEP 1: Initialize
+mkdir google-auth-app
+cd google-auth-app
+npm init -y
+🔹 STEP 2: Install Dependencies
+npm install express passport passport-google-oauth20 express-session dotenv
+🧩 PART 2: GOOGLE OAUTH SETUP
+🔹 STEP 3: Open Google Cloud Console
+
+👉 Use:
+Google OAuth 2.0
+
+🔹 STEP 4: Create Credentials
+
+✔ Create OAuth Client ID
+✔ Add:
+
+Authorized redirect URI:
+http://<EC2-IP>:3000/auth/google/callback
+
+✔ Copy:
+
+CLIENT_ID
+CLIENT_SECRET
+🧩 PART 3: CREATE ENV FILE
+
+📄 .env
+
+CLIENT_ID=your_google_client_id
+CLIENT_SECRET=your_google_client_secret
+🧩 PART 4: CREATE SERVER
+
+📄 server.js
+
+require("dotenv").config();
+const express = require("express");
+const passport = require("passport");
+const session = require("express-session");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+const app = express();
+
+// Session
+app.use(session({
+  secret: "secretkey",
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Google Strategy
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "/auth/google/callback"
+},
+(accessToken, refreshToken, profile, done) => {
+    return done(null, profile);
+}));
+
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
+
+// Routes
+app.get("/", (req, res) => {
+  res.send('<a href="/auth/google">Login with Google</a>');
+});
+
+app.get("/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get("/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req, res) => {
+    res.send("Login Successful 🚀");
+  }
+);
+
+// Start server
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+🧩 PART 5: TEST LOCALLY
+node server.js
+
+👉 Open:
+
+http://localhost:3000
+🧩 PART 6: DEPLOY ON EC2
+🔹 STEP 1: Launch EC2
+
+Using Amazon EC2
+
+✔ Open ports:
+
+22 (SSH)
+3000 (App)
+🔹 STEP 2: Connect
+ssh -i key.pem ubuntu@<EC2-IP>
+🔹 STEP 3: Install Node.js
+sudo apt update
+sudo apt install nodejs npm git -y
+🔹 STEP 4: Upload Code
+git clone https://github.com/your-repo.git
+cd google-auth-app
+🔹 STEP 5: Create .env
+nano .env
+
+Paste:
+
+CLIENT_ID=your_google_client_id
+CLIENT_SECRET=your_google_client_secret
+🔹 STEP 6: Install Dependencies
+npm install
+🔹 STEP 7: Run App
+node server.js
+🧩 PART 7: ACCESS APPLICATION
+
+👉 Open browser:
+
+http://<EC2-IP>:3000
+
+✔ Click:
+
+Login with Google
+
+✔ Output:
+
+Login Successful 🚀
+
+
+3)
+PART 1: CREATE SPRING BOOT APP
+🔹 STEP 1: Simple Controller
+
+📄 DemoController.java
+
+package com.example.demo;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController {
+
+    @GetMapping("/")
+    public String home() {
+        return "Spring Boot App Deployed via Jenkins 🚀";
+    }
+}
+🔹 STEP 2: Build JAR
+mvn clean package
+
+✔ Output:
+
+target/demo-0.0.1-SNAPSHOT.jar
+🔹 STEP 3: Push to GitHub
+git init
+git add .
+git commit -m "spring app"
+git remote add origin https://github.com/your-repo.git
+git push -u origin main
+🧩 PART 2: SETUP EC2
+🔹 STEP 1: Launch Instance
+
+Using Amazon EC2
+
+✔ Open ports:
+
+22, 8080
+🔹 STEP 2: Connect
+ssh -i key.pem ubuntu@<EC2-IP>
+🔹 STEP 3: Install Java & Maven
+sudo apt update
+sudo apt install openjdk-17-jdk maven git -y
+🧩 PART 3: INSTALL JENKINS
+sudo apt install openjdk-17-jdk -y
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+🔹 Start Jenkins
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+👉 Open:
+
+http://<EC2-IP>:8080
+
+Unlock:
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+🧩 PART 4: CREATE JENKINS PIPELINE
+🔹 STEP 1: New Item → Pipeline
+🔹 STEP 2: Add Pipeline Script
+✅ Jenkinsfile (SPRING BOOT)
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Stop Old App') {
+            steps {
+                sh 'pkill -f "java -jar" || true'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'nohup java -jar target/*.jar > output.log 2>&1 &'
+            }
+        }
+
+    }
+}
+🧩 PART 5: RUN PIPELINE
+
+👉 Click:
+
+Build Now
+🧩 PART 6: ACCESS APPLICATION
+http://<EC2-IP>:8080
+
+✔ Output:
+
+Spring Boot App Deployed via Jenkins 🚀
+⚠️ IMPORTANT FIXES
+🔹 If port conflict:
+sudo lsof -i :8080
+kill -9 <PID>
+🔹 If Maven not found:
+sudo apt install maven -y
+🔹 If Jenkins permission error:
+sudo chmod -R 777 /var/lib/jenkins
+🎯 PIPELINE FLOW
+GitHub → Jenkins → Build (Maven) → Deploy → EC2 → App Running
+
+4)✅ 4) Deploy a Web Application on Render
+
+Using:
+
+Render
+Node.js
+Express.js
+GitHub
+🧩 PART 1: CREATE WEB APPLICATION
+🔹 STEP 1: Initialize Project
+mkdir render-app
+cd render-app
+npm init -y
+🔹 STEP 2: Install Dependencies
+npm install express
+🔹 STEP 3: Create server.js (MAIN FILE)
+const express = require("express");
+const app = express();
+
+// Render uses dynamic port
+const PORT = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+  res.send("App successfully deployed on Render 🚀");
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+🔹 STEP 4: Update package.json
+{
+  "name": "render-app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+🧩 PART 2: PUSH TO GITHUB
+🔹 STEP 5: Initialize Git
+git init
+git add .
+git commit -m "Render deployment"
+🔹 STEP 6: Push to GitHub
+git remote add origin https://github.com/your-username/render-app.git
+git push -u origin main
+🧩 PART 3: DEPLOY ON RENDER
+🔹 STEP 7: Open Render
+
+👉 Go to:
+👉 Render
+
+🔹 STEP 8: Create Web Service
+Click New +
+Select Web Service
+Connect GitHub repository
+🔹 STEP 9: Configure Settings
+
+Fill:
+
+Name: render-app
+Environment: Node
+Build Command: npm install
+Start Command: npm start
+🔹 STEP 10: Deploy
+
+👉 Click:
+
+Create Web Service
+
+✔ Render will:
+
+Install dependencies
+Start server
+Deploy automatically
+🧩 PART 4: ACCESS APPLICATION
+
+👉 After deployment:
+
+https://your-app-name.onrender.com
+
+✔ Output:
+
+App successfully deployed on Render 🚀
+⚠️ IMPORTANT (VERY COMMON MISTAKE)
+❌ Wrong:
+app.listen(3000)
+✅ Correct:
+const PORT = process.env.PORT || 3000;
+app.listen(PORT)
+🎯 DEPLOYMENT FLOW
+Code → GitHub → Render → Build → Deploy → Live URL
+✅ FINAL ANSWER STRUCTURE (EXAM)
+
+Write:
+
+Create Node.js app
+Push to GitHub
+Connect to Render
+Configure build & start commands
+Deploy application
+
+5)✅ TECH STACK
+Spring Boot
+Docker
+Docker Hub
+Kubernetes
+Docker Desktop
+🧩 PART 1: CREATE SPRING BOOT APP
+🔹 STEP 1: Controller
+
+📄 DemoController.java
+
+package com.example.demo;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController {
+
+    @GetMapping("/")
+    public String home() {
+        return "Spring Boot + Docker + Kubernetes 🚀";
+    }
+}
+🔹 STEP 2: Main Class
+
+📄 DemoApplication.java
+
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+🔹 STEP 3: pom.xml (IMPORTANT)
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+</dependencies>
+🔹 STEP 4: Build JAR
+mvn clean package
+
+✔ Output:
+
+target/demo-0.0.1-SNAPSHOT.jar
+🧩 PART 2: CREATE DOCKER IMAGE
+🔹 STEP 5: Create Dockerfile
+
+📄 Dockerfile (project root)
+
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+🔹 STEP 6: Build Docker Image
+
+Using Docker
+
+docker build -t yourusername/springboot-app .
+🔹 STEP 7: Run Locally (Test)
+docker run -p 8080:8080 yourusername/springboot-app
+
+👉 Open:
+
+http://localhost:8080
+🧩 PART 3: PUSH TO DOCKER HUB
+🔹 STEP 8: Login
+docker login
+🔹 STEP 9: Push Image
+docker push yourusername/springboot-app
+
+✔ Now image is stored in Docker Hub
+
+🧩 PART 4: DEPLOY USING KUBERNETES
+🔹 STEP 10: Enable Kubernetes
+
+👉 Open Docker Desktop
+👉 Settings → Enable Kubernetes ✔
+
+🔹 STEP 11: Create Deployment File
+
+📄 deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springboot
+  template:
+    metadata:
+      labels:
+        app: springboot
+    spec:
+      containers:
+      - name: springboot-container
+        image: yourusername/springboot-app
+        ports:
+        - containerPort: 8080
+🔹 STEP 12: Create Service File
+
+📄 service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-service
+spec:
+  type: NodePort
+  selector:
+    app: springboot
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      nodePort: 30007
+🔹 STEP 13: Deploy to Kubernetes
+
+Using Kubernetes
+
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+🔹 STEP 14: Check Deployment
+kubectl get pods
+kubectl get services
+🧩 PART 5: ACCESS APPLICATION
+
+👉 Open browser:
+
+http://localhost:30007
+
+✔ Output:
+
+Spring Boot + Docker + Kubernetes 🚀
+🎯 FULL FLOW
+Spring Boot → Build JAR → Docker Image → Push → Kubernetes Deploy → Access App
+⚠️ COMMON ERRORS & FIXES
+❌ Image not found
+
+✔ Fix:
+
+docker push yourusername/springboot-app
+❌ Port not working
+
+✔ Check:
+
+kubectl get services
+❌ Pod not running
+
+✔ Check logs:
+
+kubectl logs <pod-name>
+
+6)🧩 QUESTION: JENKINS PIPELINE + OPENSHIFT DEPLOYMENT
+✅ ARCHITECTURE FLOW
+GitHub → Jenkins → Build → Docker Image → OpenShift → Deploy App
+🧩 PART 1: CREATE SPRING BOOT APP
+
+(You already know this)
+
+📄 DemoController.java
+@RestController
+public class DemoController {
+    @GetMapping("/")
+    public String home() {
+        return "Deployed on OpenShift 🚀";
+    }
+}
+🧩 PART 2: CREATE DOCKER IMAGE
+🔹 STEP 1: Dockerfile
+FROM openjdk:17-jdk-slim
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+🔹 STEP 2: Build Image
+docker build -t yourusername/springboot-openshift .
+🔹 STEP 3: Push to Docker Hub
+
+Using Docker Hub
+
+docker push yourusername/springboot-openshift
+🧩 PART 3: SETUP OPENSHIFT
+🔹 STEP 1: Login to OpenShift
+
+👉 Use:
+
+OpenShift Web Console
+or
+CLI
+
+Using CLI:
+
+oc login https://api.openshift.com
+🔹 STEP 2: Create Project
+oc new-project myproject
+🧩 PART 4: DEPLOY APP ON OPENSHIFT
+🔹 STEP 3: Deploy Image
+oc new-app yourusername/springboot-openshift
+🔹 STEP 4: Expose Service
+oc expose svc/springboot-openshift
+🔹 STEP 5: Get URL
+oc get routes
+
+✔ Output:
+
+http://your-app-route
+🧩 PART 5: CREATE JENKINS PIPELINE
+
+Using Jenkins
+
+🔹 STEP 1: Create Pipeline Job
+
+👉 Jenkins → New Item → Pipeline
+
+🔹 STEP 2: Add Pipeline Script
+✅ Jenkinsfile (READY TO RUN)
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "yourusername/springboot-openshift"
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Build JAR') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                sh 'docker push $IMAGE_NAME'
+            }
+        }
+
+        stage('Deploy to OpenShift') {
+            steps {
+                sh '''
+                oc login --token=YOUR_TOKEN --server=https://api.openshift.com
+                oc project myproject
+                oc new-app $IMAGE_NAME --name=springboot-app || true
+                oc expose svc/springboot-app || true
+                '''
+            }
+        }
+
+    }
+}
+🧩 PART 6: RUN PIPELINE
+
+👉 Click:
+
+Build Now
+🧩 PART 7: ACCESS APPLICATION
+oc get routes
+
+👉 Open URL in browser
+
+✔ Output:
+
+Deployed on OpenShift 🚀
+⚠️ IMPORTANT NOTES
+🔹 Get OpenShift Token
+oc whoami -t
+
+7)✅ WHAT IS DOCKER COMPOSE?
+
+Docker Compose
+
+👉 It is used to run multiple containers together (e.g., App + Database).
+
+🔹 Example:
+Spring Boot App + MySQL DB → run together using one command
+🎯 ARCHITECTURE
+Spring Boot App  →  MySQL Database
+        ↑                 ↑
+        └──── Docker Compose ────┘
+🧩 PART 1: CREATE SPRING BOOT APP
+🔹 STEP 1: Add Dependencies
+
+📄 pom.xml
+
+<dependencies>
+
+    <!-- Web -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- JPA -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <!-- MySQL -->
+    <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+    </dependency>
+
+</dependencies>
+🔹 STEP 2: Create Entity
+
+📄 Student.java
+
+package com.example.demo;
+
+import jakarta.persistence.*;
+
+@Entity
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    // getters and setters
+}
+🔹 STEP 3: Repository
+
+📄 StudentRepository.java
+
+package com.example.demo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface StudentRepository extends JpaRepository<Student, Long> {
+}
+🔹 STEP 4: Controller
+
+📄 StudentController.java
+
+package com.example.demo;
+
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/students")
+public class StudentController {
+
+    private final StudentRepository repo;
+
+    public StudentController(StudentRepository repo) {
+        this.repo = repo;
+    }
+
+    @PostMapping
+    public Student addStudent(@RequestBody Student student) {
+        return repo.save(student);
+    }
+
+    @GetMapping
+    public List<Student> getAll() {
+        return repo.findAll();
+    }
+}
+🔹 STEP 5: application.properties
+spring.datasource.url=jdbc:mysql://mysql:3306/testdb
+spring.datasource.username=root
+spring.datasource.password=root
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+✔ Important:
+
+mysql → this is container name (NOT localhost)
+🧩 PART 2: BUILD SPRING BOOT APP
+mvn clean package
+
+✔ Output:
+
+target/demo.jar
+🧩 PART 3: CREATE DOCKERFILE
+
+📄 Dockerfile
+
+FROM openjdk:17-jdk-slim
+
+COPY target/demo.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
+🧩 PART 4: CREATE DOCKER COMPOSE
+
+📄 docker-compose.yml
+
+version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: springboot-app
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+🧩 PART 5: RUN APPLICATION
+🔹 STEP 1: Start Containers
+
+Using Docker
+
+docker-compose up --build
+🔹 STEP 2: Check Running Containers
+docker ps
+🧩 PART 6: TEST APPLICATION
+🔹 Add Student (POST)
+http://localhost:8080/students
+
+Body:
+
+{
+  "name": "John"
+}
+🔹 Get Students (GET)
+http://localhost:8080/students
+🎯 FLOW
+Spring Boot → Dockerfile → Docker Compose → MySQL + App → Run Together
+⚠️ COMMON ERRORS & FIXES
+❌ Cannot connect to DB
+
+✔ Fix:
+
+spring.datasource.url=jdbc:mysql://mysql:3306/testdb
+
+NOT:
+
+localhost ❌
+❌ MySQL not ready
+
+✔ Add delay (optional):
+
+depends_on:
+  - mysql
+❌ Port already in use
+
+✔ Change port:
+
+"8081:8080"
+
+
+8)ECH STACK
+Express.js
+AWS S3
+Node.js
+Postman
+🎯 WHAT YOU WILL BUILD
+
+✔ Upload file → AWS S3
+✔ Get file URL → Access file
+
+🧩 PART 1: SETUP PROJECT
+🔹 STEP 1: Initialize Project
+mkdir s3-upload
+cd s3-upload
+npm init -y
+🔹 STEP 2: Install Dependencies
+npm install express multer aws-sdk dotenv
+🧩 PART 2: CREATE AWS S3 BUCKET
+🔹 STEP 3: Open AWS Console
+
+👉 Go to:
+AWS S3
+
+🔹 STEP 4: Create Bucket
+
+✔ Click Create bucket
+✔ Give name: my-bucket-123
+✔ Keep default settings
+
+🔹 STEP 5: Create IAM User
+
+👉 Go to IAM → Create user
+
+✔ Enable:
+
+Programmatic access
+
+✔ Attach policy:
+
+AmazonS3FullAccess
+
+✔ Copy:
+
+Access Key
+Secret Key
+🧩 PART 3: CREATE ENV FILE
+📄 .env
+AWS_ACCESS_KEY=your_access_key
+AWS_SECRET_KEY=your_secret_key
+AWS_REGION=us-east-1
+BUCKET_NAME=my-bucket-123
+🧩 PART 4: CREATE SERVER
+📄 server.js (MAIN FILE)
+require("dotenv").config();
+const express = require("express");
+const multer = require("multer");
+const AWS = require("aws-sdk");
+
+const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Configure S3
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+  region: process.env.AWS_REGION
+});
+
+// Upload File
+app.post("/upload", upload.single("file"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded");
+  }
+
+  const params = {
+    Bucket: process.env.BUCKET_NAME,
+    Key: Date.now() + "-" + req.file.originalname,
+    Body: req.file.buffer,
+    ContentType: req.file.mimetype
+  };
+
+  try {
+    const data = await s3.upload(params).promise();
+    res.send({
+      message: "File uploaded successfully",
+      url: data.Location
+    });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+// Get File URL
+app.get("/file/:key", (req, res) => {
+  const url = s3.getSignedUrl("getObject", {
+    Bucket: process.env.BUCKET_NAME,
+    Key: req.params.key,
+    Expires: 60
+  });
+
+  res.send({ url });
+});
+
+// Start server
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+🧩 PART 5: RUN APPLICATION
+node server.js
+🧩 PART 6: TEST USING Postman
+🔹 Upload File
+
+👉 Method: POST
+
+http://localhost:3000/upload
+
+👉 Body → form-data:
+
+Key	Type	Value
+file	File	select file
+
+✔ Response:
+
+{
+  "message": "File uploaded successfully",
+  "url": "https://bucket.s3.amazonaws.com/file.jpg"
+}
+🔹 Get File
+
+👉 Method: GET
+
+http://localhost:3000/file/<file-key>
+
+✔ Response:
+
+{
+  "url": "signed-url"
+}
